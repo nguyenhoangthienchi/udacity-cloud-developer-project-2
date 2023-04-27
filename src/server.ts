@@ -62,7 +62,6 @@ const handleError = (res: any) => {
     res.send("try GET /filteredimage?image_url={{}}")
   } );
 
-
   // Start the Server
   app.listen( port, () => {
       console.log( `server running http://localhost:${ port }` );
