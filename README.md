@@ -1,5 +1,4 @@
 As mentioned on the requirement, I have implement token-based authentication for this project.
-Also see the Github link is required, but for easy to clean up, I have attach the code folder on the submission as well. Thanks for reviewing my project.
 
 + Elastic beanstalk endpoint:
 
