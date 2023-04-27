@@ -1,10 +1,10 @@
-import express from 'express';
+import express, { Response, Request } from 'express';
 import bodyParser from 'body-parser';
 import { filterImageFromURL, deleteLocalFiles } from './util/util';
 import { expressjwt } from 'express-jwt';
 
 
-const handleError = (res: any) => {
+const handleError = (res: Response): void => {
   res.status(500).send('Internal Server Error');
 }
 
@@ -25,7 +25,7 @@ const handleError = (res: any) => {
       algorithms: ['HS256'],
   }));
 
-  app.use((err: any, req: any, res: any, next: any) => {
+  app.use((err: Error, req: Request, res: Response, next: Function) => {
     if (err.name === "UnauthorizedError") {
       res.status(401).send('Token is expired or invalid');
     } else {
@@ -33,13 +33,13 @@ const handleError = (res: any) => {
     }
   });
 
-  app.get('/filteredimage', async (req, res) => {
+  app.get('/filteredimage', async (req: Request, res: Response) => {
     const params = req.query;
 
     if (typeof params.image_url === "string") {
-      const imageUrl = params.image_url;
+      const imageUrl: string = params.image_url;
       try {
-        const image = await filterImageFromURL(imageUrl);
+        const image: string = await filterImageFromURL(imageUrl);
         res.status(200).sendFile(image, (err: any) => {
           if (err) {
             handleError(res);
@@ -58,13 +58,13 @@ const handleError = (res: any) => {
 
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
+  app.get("/", async (req: Request, res: Response): Promise<void> => {
     res.send("try GET /filteredimage?image_url={{}}")
-  } );
+  });
 
   // Start the Server
-  app.listen( port, () => {
+  app.listen(port, () => {
       console.log( `server running http://localhost:${ port }` );
       console.log( `press CTRL+C to stop server` );
-  } );
+  });
 })();
